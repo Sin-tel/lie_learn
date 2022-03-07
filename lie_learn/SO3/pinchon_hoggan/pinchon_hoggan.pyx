@@ -24,7 +24,7 @@ ctypedef np.float64_t FLOAT_TYPE_t
 INT_TYPE = np.int
 ctypedef np.int_t INT_TYPE_t
 
-
+# marked
 def apply_rotation_block(g, X, irreps, c2b, J_block, l_max, X_out=None):
 
     X, g = generalized_broadcast([X, g])
@@ -226,7 +226,7 @@ cdef apply_J_block(np.ndarray[FLOAT_TYPE_t, ndim=2] X,
 
     return X_out
 
-
+# marked
 def make_c2b(irreps):
     # Centered to block basis
 

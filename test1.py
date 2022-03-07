@@ -5,7 +5,7 @@ import timeit
 
 ## the rsh use the scipy impl anyway so theres no point to this.
 
-from lie_learn.representations.SO3.spherical_harmonics import rsh, block_sh_ph
+from lie_learn.SO3.spherical_harmonics import block_sh_ph
 
 import numpy as np
 
