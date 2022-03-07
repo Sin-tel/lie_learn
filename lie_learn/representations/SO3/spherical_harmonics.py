@@ -87,7 +87,7 @@ def block_sh_ph(L_max, theta, phi):
     # Rotate Yb:
     c2b = make_c2b(irreps)
     import os
-    J_block = np.load(os.path.join(os.path.dirname(__file__), 'pinchon_hoggan', 'J_block_0-278.npy'), allow_pickle=True)
+    J_block = np.load(os.path.join(os.path.dirname(__file__), 'pinchon_hoggan', 'J_block_0-150.npy'), allow_pickle=True)
     J_block = list(J_block[irreps])
 
     g = np.zeros((theta.size, 3))
@@ -152,6 +152,8 @@ def rsh(l, m, theta, phi, normalization='quantum', condon_shortley=True):
     from CSH to RSH is unitary, the orthogonality and normalization properties are unchanged.
     :return: the value of the real spherical harmonic S^l_m(theta, phi)
     """
+    print(l)
+
     l, m, theta, phi = np.broadcast_arrays(l, m, theta, phi)
     # Get the CSH for m and -m, using Condon-Shortley phase (regardless of whhether CS is requested or not)
     # The reason is that the code that changes from CSH to RSH assumes CS phase.

@@ -235,7 +235,7 @@ def make_c2b(irreps):
     irrep_begin = 0
     for l in irreps:
 
-        k = int(l) / 2
+        k = int(l) // 2
         if l % 2 == 0:
             # Permutation as defined by Pinchon-Hoggan for 1-based indices,
             # and l = 2 k

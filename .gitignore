@@ -2,6 +2,7 @@
 #######################
 # ignore cython-generated files
 *.c
+*.pyd
 
 # Compiled source #
 ###################
