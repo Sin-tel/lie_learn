@@ -10,8 +10,8 @@ This is NOT a user-facing API, so the interface of this file may change.
 """
 
 import numpy as np
-cimport numpy as np
-cimport cython
+# cimport numpy as np
+# cimport cython
 
 from lie_learn.broadcasting import generalized_broadcast
 
@@ -20,9 +20,9 @@ from lie_learn.broadcasting import generalized_broadcast
 #Jb = np.load(os.path.join(os.path.dirname(__file__), 'J_block_0-478.npy'), allow_pickle=True)
 
 FLOAT_TYPE = np.float64
-ctypedef np.float64_t FLOAT_TYPE_t
-INT_TYPE = np.int
-ctypedef np.int_t INT_TYPE_t
+# ctypedef np.float64_t FLOAT_TYPE_t
+INT_TYPE = np.intc
+# ctypedef np.int_t INT_TYPE_t
 
 # marked
 def apply_rotation_block(g, X, irreps, c2b, J_block, l_max, X_out=None):
@@ -46,15 +46,15 @@ def apply_rotation_block(g, X, irreps, c2b, J_block, l_max, X_out=None):
     return X_out.reshape(out_shape)
 
 # marked
-@cython.wraparound(False)
-@cython.nonecheck(False)
-@cython.boundscheck(False)
-cdef apply_z_rotation_block(np.ndarray[FLOAT_TYPE_t, ndim=1] angles,
-                            np.ndarray[FLOAT_TYPE_t, ndim=2] X,
-                            np.ndarray[INT_TYPE_t, ndim=1] irreps,
-                            np.ndarray[INT_TYPE_t, ndim=1] c2b,
-                            int l_max,
-                            np.ndarray[FLOAT_TYPE_t, ndim=2] X_out):
+# @cython.wraparound(False)
+# @cython.nonecheck(False)
+# @cython.boundscheck(False)
+def apply_z_rotation_block( angles,
+                             X,
+                             irreps,
+                             c2b,
+                             l_max,
+                             X_out):
     """
     Apply the rotation about the z-axis by angle angles[i] to the vector
     X[i, :] for all i. The vectors in X are assumed to be in the basis of real
@@ -82,27 +82,27 @@ cdef apply_z_rotation_block(np.ndarray[FLOAT_TYPE_t, ndim=1] angles,
              vector X_out[:, i, j] is the rotation of X[:,i] by angles[i, j].
     """
 
-    cdef int irrep_ind    # Index into the IRREPS2 matrix
-    cdef int irrep        # The irrep weight
-    cdef int center       # The index of the center element (l=0) of current irrep
-    cdef int offset       # The offset of the current coordinate from the center
-    cdef int abs_offset   # The absolute value of the offset
-    cdef int offset_sign  # The sign of the offset
+    # cdef int irrep_ind    # Index into the IRREPS2 matrix
+    # cdef int irrep        # The irrep weight
+    # cdef int center       # The index of the center element (l=0) of current irrep
+    # cdef int offset       # The offset of the current coordinate from the center
+    # cdef int abs_offset   # The absolute value of the offset
+    # cdef int offset_sign  # The sign of the offset
     #cdef int l_max = np.max(irreps)
 
-    cdef int Xs0 = X.shape[0]
-    cdef int Xs1 = X.shape[1]
+    Xs0 = X.shape[0]
+    Xs1 = X.shape[1]
     #cdef int Cs2
 
-    cdef int vec
-    cdef int coord
-    cdef int angle_ind
+    # cdef int vec
+    # cdef int coord
+    # cdef int angle_ind
 
-    cdef int coord1_block
-    cdef int coord2_block
+    # cdef int coord1_block
+    # cdef int coord2_block
 
-    cdef np.ndarray[FLOAT_TYPE_t, ndim=2] C = np.cos(angles[None, :] * np.arange(l_max + 1)[:, None])
-    cdef np.ndarray[FLOAT_TYPE_t, ndim=2] S = np.sin(angles[None, :] * np.arange(l_max + 1)[:, None])
+    C = np.cos(angles[None, :] * np.arange(l_max + 1)[:, None])
+    S = np.sin(angles[None, :] * np.arange(l_max + 1)[:, None])
     #Cs2 = C.shape[2]
 
     # Check that the irrep dimensions sum to the right dimensionality
@@ -146,12 +146,10 @@ cdef apply_z_rotation_block(np.ndarray[FLOAT_TYPE_t, ndim=1] angles,
     return X_out
 
 # marked
-@cython.wraparound(False)
-@cython.nonecheck(False)
-@cython.boundscheck(False)
-cdef apply_J_block(np.ndarray[FLOAT_TYPE_t, ndim=2] X,
-                   list J_block,
-                   np.ndarray[FLOAT_TYPE_t, ndim=2] X_out):
+# @cython.wraparound(False)
+# @cython.nonecheck(False)
+# @cython.boundscheck(False)
+def apply_J_block(X, J_block, X_out):
     """
     Multiply the Pinchon-Hoggan J matrix by a matrix X.
 
@@ -164,18 +162,18 @@ cdef apply_J_block(np.ndarray[FLOAT_TYPE_t, ndim=2] X,
     :return:
     """
 
-    cdef int l
-    cdef int k
-    cdef int rep_begin = 0
-    cdef int b1s
-    cdef int b1e
-    cdef int b2s
-    cdef int b2e
-    cdef int b3s
-    cdef int b3e
-    cdef int b4s
-    cdef int b4e
-    cdef int li
+    # cdef int l
+    # cdef int k
+    rep_begin = 0
+    # cdef int b1s
+    # cdef int b1e
+    # cdef int b2s
+    # cdef int b2e
+    # cdef int b3s
+    # cdef int b3e
+    # cdef int b4s
+    # cdef int b4e
+    # cdef int li
 
     # Loop over irreps
     for li in range(len(J_block)):
