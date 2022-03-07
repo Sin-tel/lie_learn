@@ -22,7 +22,7 @@ import numpy as np
 
 ext = '.pyx' if use_cython else '.c'
 files = glob.glob('lie_learn/**/*' + ext, recursive=True)
-extensions = [Extension(file.split('.')[0].replace('/', '.'), [file]) for file in files]
+extensions = [Extension(file.split('.')[0].replace('\\', '.'), [file]) for file in files]  ## change to backslash lol
 if use_cython:
     from Cython.Build import cythonize
 
