@@ -1,5 +1,8 @@
 import timeit
 
+from scipy.spatial.transform import Rotation as R
+
+
 from lie_learn.spectral.SO3FFT_Naive import SO3_FFT_synthesize
 from lie_learn.representations.SO3.irrep_bases import change_of_basis_matrix
 from lie_learn.representations.SO3.pinchon_hoggan.pinchon_hoggan_dense import SO3_irrep
@@ -11,8 +14,8 @@ np.random.seed(2022)
 
 l_max = 16
 
-phi = np.random.uniform(-np.pi,np.pi,100)
-theta   = np.random.uniform(0,np.pi,100)
+phi = np.random.uniform(-np.pi,np.pi,1000)
+theta   = np.random.uniform(0,np.pi,1000)
 Y = block_sh_ph(l_max, theta, phi)
 
 k = 0.01
@@ -80,6 +83,21 @@ print(ind)
 print(alpha, beta, gamma)
 
 
+rot = R.from_euler("zyz", [alpha, beta, gamma])
+g = rot.as_euler("ZYZ")
+g[1] = -g[1]
+
+r_mat = np.array(
+		[np.squeeze(SO3_irrep(np.atleast_2d(g).T, l)) for l in range(l_max)],
+		dtype=object,
+	)
+
+weights_rot = np.empty(w1.shape)
+# rotate each degree by the respective block
+for l in range(l_max):
+	weights_rot[l**2 : (l + 1)**2] = r_mat[l].dot(
+		w1[l**2 : (l + 1)**2]
+	)
 
 print("--------------------------------------------")
 
@@ -113,3 +131,13 @@ def outer():
 
 result = timeit.timeit('outer()', globals=globals(), number=10)
 print("outer:", result)
+
+
+def rotate_calc():
+	r_mat = np.array(
+		[np.squeeze(SO3_irrep(np.atleast_2d(g).T, l)) for l in range(l_max)],
+		dtype=object,
+	)
+
+result = timeit.timeit('rotate_calc()', globals=globals(), number=10)
+print("rotation:", result)
