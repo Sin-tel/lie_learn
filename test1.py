@@ -21,13 +21,13 @@ def sph_real(l, m, phi, theta):
 		return scale * sph_harm(abs(m), l, phi, theta).imag
 
 
-max_degree = 32
+max_degree = 24
 normalization='quantum'
 condon_shortley=True
 
 
-phi = np.random.uniform(-np.pi,np.pi,10000)
-theta   = np.random.uniform(0,np.pi,10000)
+phi = np.random.uniform(-np.pi,np.pi,100)
+theta   = np.random.uniform(0,np.pi,100)
 
 def testEqual():
 	for l in range(0, max_degree):
@@ -37,7 +37,7 @@ def testEqual():
 
 			print(np.allclose(Y1, Y2))
 
-			print(Y1)
+			# print(Y1)
 
 
 def build_Y():
@@ -77,4 +77,5 @@ print("scipy:", result)
 result = timeit.timeit('evalLie()', globals=globals(), number=10)
 print("lie_learn:", result)
 
+# testEqual()
 # testEqual2()

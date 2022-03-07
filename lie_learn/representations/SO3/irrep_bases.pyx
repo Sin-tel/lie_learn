@@ -49,7 +49,8 @@ References:
 
 import numpy as np
 cimport numpy as np
-import collections
+from collections.abc import Iterable
+
 from scipy.linalg import block_diag
 
 INT_TYPE = np.int64
@@ -82,7 +83,7 @@ def change_of_basis_matrix(l, frm=('complex', 'seismology', 'centered', 'cs'), t
     from_field, from_normalization, from_ordering, from_cs = frm
     to_field, to_normalization, to_ordering, to_cs = to
 
-    if isinstance(l, collections.Iterable):
+    if isinstance(l, Iterable):
         blocks = [change_of_basis_matrix(li, frm, to)
                   for li in l]
         return block_diag(*blocks)
@@ -184,7 +185,7 @@ def change_of_basis_function(l, frm=('complex', 'seismology', 'centered', 'cs'),
     from_field, from_normalization, from_ordering, from_cs = frm
     to_field, to_normalization, to_ordering, to_cs = to
 
-    if not isinstance(l, np.ndarray):  # collections.Iterable):
+    if not isinstance(l, np.ndarray):  # Iterable):
         l = np.atleast_1d(np.array(l))
 
     # First, bring us to the centered basis:
@@ -450,7 +451,7 @@ def _seismology2quantum(l, full_matrix=False):
     :param full_matrix:
     :return:
     """
-    if isinstance(l, collections.Iterable):
+    if isinstance(l, Iterable):
         diags = [_seismology2quantum(li, full_matrix=False) for li in l]
         diagonal = np.hstack(diags)
 
@@ -467,7 +468,7 @@ def _seismology2quantum(l, full_matrix=False):
 
 
 def _geodesy2quantum(l, full_matrix=False):
-    if isinstance(l, collections.Iterable):
+    if isinstance(l, Iterable):
         diags = [_geodesy2quantum(li, full_matrix=False) for li in l]
         diagonal = np.hstack(diags)
 
@@ -486,7 +487,7 @@ def _geodesy2quantum(l, full_matrix=False):
 
 def _nfft2quantum(l, full_matrix=False):
 
-    if isinstance(l, collections.Iterable):
+    if isinstance(l, Iterable):
         diags = [_nfft2quantum(li, full_matrix=False) for li in l]
         diagonal = np.hstack(diags)
 
