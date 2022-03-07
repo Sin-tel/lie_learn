@@ -48,19 +48,12 @@ References:
 """
 
 import numpy as np
-cimport numpy as np
+
 from collections.abc import Iterable
 
 from scipy.linalg import block_diag
 
-INT_TYPE = np.int64
-ctypedef np.int64_t INT_TYPE_t
 
-FLOAT_TYPE = np.float64
-ctypedef np.float64_t FLOAT_TYPE_t
-
-COMPLEX_TYPE = np.complex128
-ctypedef np.complex128_t COMPLEX_TYPE_t
 
 
 def change_of_basis_matrix(l, frm=('complex', 'seismology', 'centered', 'cs'), to=('real', 'quantum', 'centered', 'cs')):
@@ -196,8 +189,8 @@ def change_of_basis_function(l, frm=('complex', 'seismology', 'centered', 'cs'),
     else:
         raise ValueError('Invalid from_order: ' + str(from_ordering))
 
-    ms = np.zeros(np.sum(2 * l + 1), dtype=INT_TYPE)
-    ls = np.zeros(np.sum(2 * l + 1), dtype=INT_TYPE)
+    ms = np.zeros(np.sum(2 * l + 1), dtype=np.int64)
+    ls = np.zeros(np.sum(2 * l + 1), dtype=np.int64)
     i = 0
     for ll in l:
         for mm in range(-ll, ll + 1):
@@ -322,8 +315,7 @@ def _cc2rc(l):
     return (1.0 / np.sqrt(2)) * B
 
 
-def _cc2rc_func(np.ndarray[COMPLEX_TYPE_t, ndim=1] x,
-                np.ndarray[INT_TYPE_t, ndim=1] m_arr):
+def _cc2rc_func(x, m_arr):
     """
     Compute change of basis from the complex centered (cc) basis
     to the real centered (rc) basis.
@@ -341,10 +333,9 @@ def _cc2rc_func(np.ndarray[COMPLEX_TYPE_t, ndim=1] x,
     http://en.wikipedia.org/wiki/Spherical_harmonics#Real_form_2
     """
 
-    cdef int i = 0
-    cdef np.ndarray[FLOAT_TYPE_t, ndim=1] x_out = np.empty(x.size)
-    cdef double sq2 = np.sqrt(2)
-    cdef double isq2 = 1. / sq2
+    x_out = np.empty(x.size)
+    sq2 = np.sqrt(2)
+    isq2 = 1. / sq2
 
     for i in range(m_arr.size):
         m = m_arr[i]
@@ -358,8 +349,7 @@ def _cc2rc_func(np.ndarray[COMPLEX_TYPE_t, ndim=1] x,
     return x_out
 
 
-def _rc2cc_func(np.ndarray[FLOAT_TYPE_t, ndim=1] x,
-                np.ndarray[INT_TYPE_t, ndim=1] m_arr):
+def _rc2cc_func(x, m_arr):
     """
     Compute change of basis from the real centered (rc) basis
     to the complex centered (cc) basis.
@@ -368,10 +358,10 @@ def _rc2cc_func(np.ndarray[FLOAT_TYPE_t, ndim=1] x,
     http://en.wikipedia.org/wiki/Spherical_harmonics#Real_form_2
     """
 
-    cdef int i = 0
-    cdef np.ndarray[COMPLEX_TYPE_t, ndim=1] x_out = np.empty(x.size, dtype=COMPLEX_TYPE)
-    cdef double sq2 = np.sqrt(2)
-    cdef double isq2 = 1. / sq2
+    # cdef int i = 0
+    x_out = np.empty(x.size, dtype=np.complex128_t)
+    sq2 = np.sqrt(2)
+    isq2 = 1. / sq2
 
     for i in range(m_arr.size):
         m = m_arr[i]

@@ -12,7 +12,7 @@ import numpy as np
 
 np.random.seed(2022)
 
-l_max = 16
+l_max = 32
 
 phi = np.random.uniform(-np.pi,np.pi,1000)
 theta   = np.random.uniform(0,np.pi,1000)
@@ -141,3 +141,10 @@ def rotate_calc():
 
 result = timeit.timeit('rotate_calc()', globals=globals(), number=10)
 print("rotation:", result)
+
+
+### 32, 1000
+# fft: 0.5448626000000001
+# cb_calc: 0.1223109
+# outer: 0.024562799999999996
+# rotation: 0.05395109999999992
