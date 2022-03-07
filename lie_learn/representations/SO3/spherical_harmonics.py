@@ -6,6 +6,15 @@ try:
 except:
     from scipy.special import factorial
 
+import os
+
+base = 'J_block_0-150.npy'
+path = os.path.join(os.path.dirname(__file__), 'pinchon_hoggan', base)
+Jb = np.load(path, allow_pickle=True)
+
+# J_block = np.load(os.path.join(os.path.dirname(__file__), 'pinchon_hoggan', 'J_block_0-150.npy'), allow_pickle=True)
+# J_block = list(J_block[irreps])
+
 def sh(l, m, theta, phi, field='real', normalization='quantum', condon_shortley=True):
     if field == 'real':
         return rsh(l, m, theta, phi, normalization, condon_shortley)
@@ -49,7 +58,7 @@ def sh_squared_norm(l, normalization='quantum', normalized_haar=True):
 
 def block_sh_ph(L_max, theta, phi):
     """
-    Compute all spherical harmonics up to and including degree L_max, for angles theta and phi.
+    Compute all spherical harmonics up to (not including) degree L_max, for angles theta and phi.
 
     This function is currently rather hacky, but the method used here is very fast and stable, compared
     to builtin scipy functions.
@@ -63,7 +72,7 @@ def block_sh_ph(L_max, theta, phi):
     from .pinchon_hoggan.pinchon_hoggan import apply_rotation_block, make_c2b
     from .irrep_bases import change_of_basis_function
 
-    irreps = np.arange(L_max + 1)
+    irreps = np.arange(L_max)
 
     ls = [[ls] * (2 * ls + 1) for ls in irreps]
     ls = np.array([ll for sublist in ls for ll in sublist])  # 0, 1, 1, 1, 2, 2, 2, 2, 2, ...
@@ -86,9 +95,10 @@ def block_sh_ph(L_max, theta, phi):
 
     # Rotate Yb:
     c2b = make_c2b(irreps)
-    import os
-    J_block = np.load(os.path.join(os.path.dirname(__file__), 'pinchon_hoggan', 'J_block_0-150.npy'), allow_pickle=True)
-    J_block = list(J_block[irreps])
+
+    global Jb
+
+    J_block = list(Jb[irreps])
 
     g = np.zeros((theta.size, 3))
     g[:, 0] = phi
@@ -97,12 +107,12 @@ def block_sh_ph(L_max, theta, phi):
                                irreps=irreps, c2b=c2b,
                                J_block=J_block, l_max=np.max(irreps))
 
-    print(Yb.shape, TYb.shape)
+    # print(Yb.shape, TYb.shape)
 
     # Change back to centered basis
     TYc = b2c(TYb.T).T  # b2c doesn't work properly for matrices, so do a transpose hack
 
-    print(TYc.shape)
+    # print(TYc.shape)
 
     # Somehow, the SH obtained so far are equal to real, nfft, cs spherical harmonics
     # Change to real quantum centered cs
@@ -110,7 +120,7 @@ def block_sh_ph(L_max, theta, phi):
                                  frm=('real', 'nfft', 'centered', 'cs'),
                                  to=('real', 'quantum', 'centered', 'cs'))
     TYc2 = c(TYc)
-    print(TYc2.shape)
+    # print(TYc2.shape)
 
     return TYc2
 
@@ -152,8 +162,6 @@ def rsh(l, m, theta, phi, normalization='quantum', condon_shortley=True):
     from CSH to RSH is unitary, the orthogonality and normalization properties are unchanged.
     :return: the value of the real spherical harmonic S^l_m(theta, phi)
     """
-    print(l)
-
     l, m, theta, phi = np.broadcast_arrays(l, m, theta, phi)
     # Get the CSH for m and -m, using Condon-Shortley phase (regardless of whhether CS is requested or not)
     # The reason is that the code that changes from CSH to RSH assumes CS phase.
