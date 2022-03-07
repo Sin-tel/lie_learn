@@ -3,16 +3,17 @@ import timeit
 from lie_learn.spectral.SO3FFT_Naive import SO3_FFT_synthesize
 from lie_learn.representations.SO3.irrep_bases import change_of_basis_matrix
 from lie_learn.representations.SO3.pinchon_hoggan.pinchon_hoggan_dense import SO3_irrep
+from lie_learn.representations.SO3.spherical_harmonics import block_sh_ph
 
 import numpy as np
 
 np.random.seed(2022)
 
-l_max = 32
+l_max = 16
 
-# phi = np.random.uniform(-np.pi,np.pi,100)
-# theta   = np.random.uniform(0,np.pi,100)
-# Y = block_sh_ph(l_max, theta, phi)
+phi = np.random.uniform(-np.pi,np.pi,100)
+theta   = np.random.uniform(0,np.pi,100)
+Y = block_sh_ph(l_max, theta, phi)
 
 k = 0.01
 
@@ -84,7 +85,7 @@ print("--------------------------------------------")
 
 
 
-result = timeit.timeit('SO3_FFT_synthesize(f_hat)', globals=globals(), number=100)
+result = timeit.timeit('SO3_FFT_synthesize(f_hat)', globals=globals(), number=10)
 print("fft:", result)
 
 
@@ -98,7 +99,7 @@ def cb_calc():
 		for l in range(l_max_weights)
 	]
 
-result = timeit.timeit('cb_calc()', globals=globals(), number=100)
+result = timeit.timeit('cb_calc()', globals=globals(), number=10)
 print("cb_calc:", result)
 
 
@@ -110,5 +111,5 @@ def outer():
 			)
 		)
 
-result = timeit.timeit('outer()', globals=globals(), number=100)
+result = timeit.timeit('outer()', globals=globals(), number=10)
 print("outer:", result)
