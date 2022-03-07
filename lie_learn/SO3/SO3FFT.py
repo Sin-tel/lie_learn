@@ -2,7 +2,7 @@ from functools import lru_cache
 
 import numpy as np
 
-from lie_learn.representations.SO3.wigner_d import wigner_d_matrix
+from lie_learn.SO3.wigner_d import wigner_d_matrix
 
 from scipy.fftpack import fft2, ifft2, fftshift
 

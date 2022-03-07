@@ -3,10 +3,10 @@ import timeit
 from scipy.spatial.transform import Rotation as R
 
 
-from lie_learn.spectral.SO3FFT_Naive import SO3_FFT_synthesize
-from lie_learn.representations.SO3.irrep_bases import change_of_basis_matrix
-from lie_learn.representations.SO3.pinchon_hoggan.pinchon_hoggan_dense import SO3_irrep
-from lie_learn.representations.SO3.spherical_harmonics import block_sh_ph
+from lie_learn.SO3.SO3FFT import SO3_FFT_synthesize
+from lie_learn.SO3.irrep_bases import change_of_basis_matrix
+from lie_learn.SO3.pinchon_hoggan.pinchon_hoggan_dense import SO3_irrep
+from lie_learn.SO3.spherical_harmonics import block_sh_ph
 
 import numpy as np
 
