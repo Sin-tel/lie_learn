@@ -45,7 +45,7 @@ def apply_rotation_block(g, X, irreps, c2b, J_block, l_max, X_out=None):
 
     return X_out.reshape(out_shape)
 
-
+# marked
 @cython.wraparound(False)
 @cython.nonecheck(False)
 @cython.boundscheck(False)
@@ -145,7 +145,7 @@ cdef apply_z_rotation_block(np.ndarray[FLOAT_TYPE_t, ndim=1] angles,
 
     return X_out
 
-
+# marked
 @cython.wraparound(False)
 @cython.nonecheck(False)
 @cython.boundscheck(False)
