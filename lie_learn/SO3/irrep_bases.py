@@ -47,6 +47,8 @@ References:
 [2] Rotation matrices for real spherical harmonics: general rotations of atomic orbitals in space-fixed axes.
 """
 
+from functools import lru_cache
+
 import numpy as np
 
 from collections.abc import Iterable
@@ -55,7 +57,7 @@ from scipy.linalg import block_diag
 
 
 
-
+@lru_cache(maxsize=32)
 def change_of_basis_matrix(l, frm=('complex', 'seismology', 'centered', 'cs'), to=('real', 'quantum', 'centered', 'cs')):
     """
     Compute change-of-basis matrix that takes the 'frm' basis to the 'to' basis.

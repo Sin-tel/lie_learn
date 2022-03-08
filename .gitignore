@@ -94,3 +94,4 @@ tramp
 dist
 build
 *.html
+*.prof
