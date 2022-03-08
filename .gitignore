@@ -94,3 +94,6 @@ tramp
 dist
 build
 *.html
+*.sublime-project
+*.sublime-workspace
+*.prof
