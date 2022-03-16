@@ -1,7 +1,7 @@
 
 import numpy as np
 
-from lie_learn.SO3.pinchon_hoggan.pinchon_hoggan_dense import Jd, rot_mat
+from lie_learn.SO3.pinchon_hoggan_dense import Jd, rot_mat
 from lie_learn.SO3.irrep_bases import change_of_basis_matrix
 
 # marked
