@@ -95,5 +95,3 @@ dist
 build
 *.html
 *.prof
-*.sublime-project
-*.sublime-workspace
